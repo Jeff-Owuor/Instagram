@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'doubletap.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'instagram',
+        'NAME': 'instaclone',
         'USER': 'paulineapondi',
         'PASSWORD':'1989',
     }

@@ -1,5 +1,5 @@
 from django import forms
-from . models import Images
+from . models import Images,Profile
 
 
 class UploadImageForm(forms.ModelForm):
@@ -8,3 +8,10 @@ class UploadImageForm(forms.ModelForm):
             model = Images
             fields = '__all__'
             exclude = ['profile']
+            
+            
+class ProfilePicForm(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        fields = '__all__'
