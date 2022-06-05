@@ -12,7 +12,11 @@
             <h2>{{image.profile.user.username}}</h2>
             <img  src="{{image.image.url}}" width="270px" height="250px" style="margin-top:9px;border-radius: 5%;">
             <p><span style="font-weight:bold">{{image.profile.user.username}} </span>{{image.image_caption}}</p>
-            <p>{{image.image_name}}</p>
+            <form action="{% url 'like_post' image.pk %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-danger" type="submit" name="post_id" value="{{image.id}}">Like</button>
+            </form>
+            <!-- <p>{{image.image_name}}</p> -->
         </div>
         {% endfor %}
     </div>

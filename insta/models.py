@@ -17,3 +17,7 @@ class Images(models.Model):
     image_name = models.CharField(max_length=50)
     image_caption = models.TextField(blank=True)
     profile= models.ForeignKey(Profile,on_delete=models.CASCADE,default=1)
+    likes = models.ManyToManyField(User, related_name='instagram')
+    
+    def num_likes(self):
+        return self.likes.count()
