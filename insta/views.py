@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UploadImageForm,ProfilePicForm
 from .models import Images
@@ -11,15 +11,40 @@ def index(request):
 # Create your views here.
 @login_required(login_url='/accounts/login/')
 def imageUpload(request):
-    user = request.user
-    upload_form = UploadImageForm(instance=user)
-    return render(request,'insta/post.html',{'upload_form':upload_form})
+    current_user  = request.user
+    if request.method =='POST':
+        form = UploadImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = current_user
+            image.save()
+        return redirect('home')
+    else:
+        form  = UploadImageForm()
+        context  = {
+            "form":form
+            }
+    return render(request, 'insta/post.html', context)
+
+
 
 @login_required(login_url='/accounts/login/')
 def updateProfilePage(request):
-    user= request.user
-    form = ProfilePicForm(instance=user)
-    return render(request,'user/update_profile.html',{"form":form})
+   current_user  = request.user
+   
+   if request.method =='POST':
+        form = ProfilePicForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.user = current_user
+            image.save()
+        return redirect('home')
+   else:
+        form  = ProfilePicForm()
+        context  = {
+            "form":form
+            }
+   return render(request,'user/update_profile.html',context)
 
 # @login_required(login_url='/accounts/login/')
 # def myprofile(request, username = None):

@@ -5,8 +5,18 @@
        What it do baby!!!
    </h1>
 
-{% for image in images %}
+   <div class="container">
+       <div class="row">
+        {% for image in images %}
+        <div class="col-md-4">
+            <h2>{{image.profile.user.username}}</h2>
+            <img  src="{{image.image.url}}" width="270px" height="250px" style="margin-top:9px;border-radius: 5%;">
+            <p><span style="font-weight:bold">{{image.profile.user.username}} </span>{{image.image_caption}}</p>
+            <p>{{image.image_name}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-{% endfor %}
 
 {% endblock %}

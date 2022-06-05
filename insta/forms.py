@@ -7,7 +7,7 @@ class UploadImageForm(forms.ModelForm):
     class Meta:
             model = Images
             fields = '__all__'
-            exclude = ['profile']
+            exclude = ['user']
             
             
 class ProfilePicForm(forms.ModelForm):
