@@ -21,3 +21,8 @@ class Images(models.Model):
     
     def num_likes(self):
         return self.likes.count()
+    
+    @classmethod
+    def get_image_by_id(cls,id):
+        images = cls.objects.get(id=id)
+        return images

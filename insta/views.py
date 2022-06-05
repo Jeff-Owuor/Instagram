@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views import View
 from .forms import UploadImageForm,ProfilePicForm
 from .models import Images
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def LikeView(request,pk):
@@ -11,10 +13,9 @@ def LikeView(request,pk):
     post.likes.add(request.user)
     
     return redirect('home')
-    
+
 
 def index(request):
-    likes = get_object_or_404(Images)
     images = Images.objects.all()
     return render(request,'insta/index.html',{'images':images})
 

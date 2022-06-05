@@ -14,7 +14,12 @@
             <p><span style="font-weight:bold">{{image.profile.user.username}} </span>{{image.image_caption}}</p>
             <form action="{% url 'like_post' image.pk %}" method="POST">
                 {% csrf_token %}
-                <button class="btn btn-sm btn-danger" type="submit" name="post_id" value="{{image.id}}">Like</button>
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="btn" type="submit" name="post_id" value="{{image.id}}">
+                    <i class="fa fa-heart-o fa-3x" aria-hidden="true"></i>
+                </button>
+                <p>{{image.likes.all.count}} likes</p>
+                <!-- <p>{{total_likes}} likes</p> -->
             </form>
             <!-- <p>{{image.image_name}}</p> -->
         </div>
