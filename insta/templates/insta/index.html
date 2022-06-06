@@ -1,8 +1,8 @@
 {%extends "django_registration/base.html"%}
 
 {% block content %}
-   <h1>
-       What it do baby!!!
+   <h1 style="font-family:'Courier New', Courier, monospace;text-align:center">
+       Insta clone
    </h1>
 
    <div class="container">
@@ -17,9 +17,9 @@
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <div class="containerEl" style="display:flex">
                 <button class="btn" type="submit" name="post_id" value="{{image.id}}">
-                    <i class="fa fa-heart-o fa-3x" aria-hidden="true"></i>
+                    <i class="fa fa-heart-o fa-3x" aria-hidden="true" style="color:white"></i>
                 </button>
-                <a href="{% url 'add_comment' image.pk %}" style="color:black"><i class="fa fa-comment-o fa-3x" aria-hidden="true"></i></a>
+                <a href="{% url 'add_comment' image.pk %}" style="color:white"><i class="fa fa-comment-o fa-3x" aria-hidden="true"></i></a>
             </div>
                 <p>{{image.likes.all.count}} likes</p>
                 <!-- <p>{{total_likes}} likes</p> -->
