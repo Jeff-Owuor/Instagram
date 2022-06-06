@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views import View
 from .forms import UploadImageForm,ProfilePicForm,CommentForm
 from .models import Comments, Images
-from django.http import HttpResponseRedirect
-from django.urls import reverse,reverse_lazy
-from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView,UpdateView
+from django.contrib.auth.forms import UserChangeForm
+
 
 
 def LikeView(request,pk):
@@ -20,10 +19,22 @@ def index(request):
     images = Images.objects.all()
     return render(request,'insta/index.html',{'images':images})
 
+class UserEditView(UpdateView):
+    form_class= UserChangeForm
+    template_name = 'user/user_profile.html'
+    success_url = reverse_lazy('home')
+    
+    def get_object(self):
+        return self.request.user
+
 class AddCommentView(CreateView):
     model = Comments
     form_class = CommentForm
     template_name= 'insta/add_comments.html'
+    def form_valid(self, form):
+        form.instance.image_id = self.kwargs['pk']
+        return super().form_valid(form)
+    
     success_url = reverse_lazy('home')
     
 

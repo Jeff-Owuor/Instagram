@@ -15,9 +15,12 @@
             <form action="{% url 'like_post' image.pk %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
+                <div class="containerEl" style="display:flex">
                 <button class="btn" type="submit" name="post_id" value="{{image.id}}">
                     <i class="fa fa-heart-o fa-3x" aria-hidden="true"></i>
                 </button>
+                <a href="{% url 'add_comment' image.pk %}" style="color:black"><i class="fa fa-comment-o fa-3x" aria-hidden="true"></i></a>
+            </div>
                 <p>{{image.likes.all.count}} likes</p>
                 <!-- <p>{{total_likes}} likes</p> -->
             </form>
@@ -25,12 +28,11 @@
             {% if not image.comments.all %}
               No comments yet ... <a href="{% url 'add_comment' image.pk %}">Add one</a>
               {% else %}
-              <a href="{% url 'add_comment' image.pk %}">Add comment</a>
               <br/>
                  {% for comment in image.comments.all %}
-                   <h3>{{comment.name}}</h3>
-                   <p>{{comment.body}}</p>
-                   {{comment.date_added}}
+                   <p><span style="font-weight:bold">{{comment.name}}</span>  {{comment.body}} {{comment.date_added|date:"SHORT_DATETIME_FORMAT"}}</p>
+                   
+                   
                 {% endfor %}
             {% endif %}
             <!-- <p>{{image.image_name}}</p> -->
