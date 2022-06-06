@@ -1,11 +1,28 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import UploadImageForm,ProfilePicForm,CommentForm
-from .models import Comments, Images
+from .models import Comments, Images,Profile,Follow
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView,UpdateView
+from django.views.generic import DetailView
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
 
+
+def unfollow(request, to_unfollow):
+    if request.method == 'GET':
+        user_profile2 = Profile.objects.get(pk=to_unfollow)
+        unfollow_d = Follow.objects.filter(follower=request.user.profile, followed=user_profile2)
+        unfollow_d.delete()
+        return redirect('profile', user_profile2.user.username)
+
+
+def follow(request, to_follow):
+    if request.method == 'GET':
+        user_profile3 = Profile.objects.get(pk=to_follow)
+        follow_s = Follow(follower=request.user.profile, followed=user_profile3)
+        follow_s.save()
+        return redirect('profile', user_profile3.user.username)
 
 
 def LikeView(request,pk):

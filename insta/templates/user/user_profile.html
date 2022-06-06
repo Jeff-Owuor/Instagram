@@ -8,12 +8,47 @@
 
 
 <br/><br/>
-<div class="card" style="width: 24rem;">
-    <img src="{{user.profile.profile_photo.url}}" alt="" srcset="">
-    <div class="card-body">
-      <h5 class="card-title">{{ user.username }}</h5>
-      <p class="card-text">{{ user.profile.bio }}</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+        <div class="card" style="width: 24rem;">
+            <img src="{{user.profile.profile_photo.url}}" alt="" srcset="">
+            <div class="card-body">
+              <h5 class="card-title">{{ user.username }}</h5>
+              <p class="card-text">{{ user.profile.bio }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+       <span class="mr-5"><strong>{{ user.profile.image.count }}</strong> Posts</span>
+    </div>
+    <div class="col-md-2">
+      <span class="mr-5"> <strong>{{ user.profile.followers.count }}</strong> followers</span>
+    </div>
+    <div class="col-md-2">
+      <span class="mr-5"> <strong>{{ user.profile.following.count }}</strong> following</span>
+      <div style="margin-left:-200px">
+      {% if follow_status %}
+        <a class="btn btn-sm btn-outline-danger ml-5" href="{% url 'unfollow' user.profile.id %}">Unfollow</a>
+        
+        {%else%}
+        
+          <a class="btn btn-sm btn-primary ml-5" href="{% url 'follow' user.profile.id %}">Follow</a>
+        {% endif %}
+      </div>
+    </div>
+                    
+  </div>
+  <div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-6">
+        
     </div>
   </div>
+</div>
+
+
+                                
   
 {%endblock%}
