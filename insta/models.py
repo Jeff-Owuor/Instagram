@@ -54,6 +54,17 @@ class Images(models.Model):
         profile = Images.objects.filter(user__user=user).all()
         return profile
     
+    @property
+    def get_all_comments(self):
+        return self.comments.all()
+
+    def save_image(self):
+        self.save()
+
+    def delete_image(self):
+        self.delete()
+
+    
 class Comments(models.Model):
     image = models.ForeignKey(Images,on_delete=models.CASCADE,related_name='comments')
     name = models.CharField(max_length=60)
