@@ -7,6 +7,7 @@ from django.views.generic.edit import CreateView,UpdateView
 from django.views.generic import DetailView
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 
 def unfollow(request, to_unfollow):
@@ -24,6 +25,9 @@ def follow(request, to_follow):
         follow_s.save()
         return redirect('profile', user_profile3.user.username)
 
+def logout_user(request):
+    logout(request)
+    return redirect('home')
 
 def LikeView(request,pk):
     post = get_object_or_404(Images, id=request.POST.get('post_id'))
@@ -43,6 +47,21 @@ class UserEditView(UpdateView):
     
     def get_object(self):
         return self.request.user
+    
+def profile(request, username):
+        user_profile = Images.get_Profile(username)
+        print(user_profile.username)
+        if request.user == user_profile:
+           return redirect('update_profile', username=request.user.username)
+      
+    
+        context = {
+        'user_profile': user_profile,
+       
+         }
+
+        return render(request, 'user/user_profile.html', context)
+
 
 class AddCommentView(CreateView):
     model = Comments
