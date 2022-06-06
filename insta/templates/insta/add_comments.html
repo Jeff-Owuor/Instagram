@@ -1,0 +1,15 @@
+{%extends "django_registration/base.html"%}
+{% load bootstrap4 %}
+
+{% block content %}
+  <h1>Add comment</h1>  
+  <div class="form-group">
+      <form action="" method="POST">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <button class="btn btn-primary"> Add Comment</button>
+      </form>
+  </div>
+
+
+{% endblock %}

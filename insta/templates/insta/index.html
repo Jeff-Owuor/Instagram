@@ -21,6 +21,18 @@
                 <p>{{image.likes.all.count}} likes</p>
                 <!-- <p>{{total_likes}} likes</p> -->
             </form>
+            <h2>Comments ...</h2>
+            {% if not image.comments.all %}
+              No comments yet ... <a href="{% url 'add_comment' image.pk %}">Add one</a>
+              {% else %}
+              <a href="{% url 'add_comment' image.pk %}">Add comment</a>
+              <br/>
+                 {% for comment in image.comments.all %}
+                   <h3>{{comment.name}}</h3>
+                   <p>{{comment.body}}</p>
+                   {{comment.date_added}}
+                {% endfor %}
+            {% endif %}
             <!-- <p>{{image.image_name}}</p> -->
         </div>
         {% endfor %}

@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from .forms import UploadImageForm,ProfilePicForm
-from .models import Images
+from .forms import UploadImageForm,ProfilePicForm,CommentForm
+from .models import Comments, Images
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
+from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -18,6 +19,13 @@ def LikeView(request,pk):
 def index(request):
     images = Images.objects.all()
     return render(request,'insta/index.html',{'images':images})
+
+class AddCommentView(CreateView):
+    model = Comments
+    form_class = CommentForm
+    template_name= 'insta/add_comments.html'
+    success_url = reverse_lazy('home')
+    
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')

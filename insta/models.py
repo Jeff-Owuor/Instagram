@@ -26,3 +26,9 @@ class Images(models.Model):
     def get_image_by_id(cls,id):
         images = cls.objects.get(id=id)
         return images
+    
+class Comments(models.Model):
+    image = models.ForeignKey(Images,on_delete=models.CASCADE,related_name='comments')
+    name = models.CharField(max_length=60)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
