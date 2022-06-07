@@ -1,4 +1,4 @@
-# Motherland
+# Instagram clone
 ### Description
 This is a python django application where users can view images posted by other users on their timeline as well as their images on the profile page.
 
