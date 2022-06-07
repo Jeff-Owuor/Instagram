@@ -14,6 +14,6 @@ urlpatterns = [
     re_path(r'^user_profile/<username>/$',user_profile, name='user_profile'),
     path('unfollow/<to_unfollow>',unfollow, name='unfollow'),
     path('follow/<to_follow>', follow, name='follow'),
-    path('logout_user/',logout_user,name='logout')
+    path('logout/',logout_user,name='logout')
     
 ]

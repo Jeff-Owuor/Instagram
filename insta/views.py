@@ -37,6 +37,17 @@ def register(request):
 
 def loginPage(request):
     context ={}
+    
+    if request.method == 'POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        
+        user = authenticate(request,username=username,password=password)
+        
+        if user is not None:
+            login(request,user)
+            return redirect('home')
+    
     return render(request,'registration/login.html',context)
 
 def profile(request, id):
@@ -47,7 +58,7 @@ def profile(request, id):
 
 def logout_user(request):
     logout(request)
-    return redirect('home')
+    return redirect('login')
 
 def LikeView(request,pk):
     post = get_object_or_404(Images, id=request.POST.get('post_id'))

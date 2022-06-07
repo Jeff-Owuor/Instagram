@@ -40,21 +40,7 @@
         </article>
     </section>
 
-    <section class="user-posts">
-        <article class="user-posts-container">
-            <div class="user-posts-title">
-                <img src="{% static 'images/more.png'%}" alt="posts">
-                <h4>Posts</h4>
-            </div>
-            <ul class="user-posts-posts">
-                {% for post in profile.profile.all %}
-                <li class="user-posts-posts-li">
-                    <a href="{% url 'single' post.id %}"><img src="{{post.image.url}}" alt=""></a>
-                </li>
-                {% endfor %}
-            </ul>
-        </article>
-    </section>
+    
 
 </div>
 </body>

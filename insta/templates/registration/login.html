@@ -3,14 +3,14 @@
 {% block content %}
 <form class="login-form" method="post">
     <section class="login-form-container">
-        {% csrf_token %}
-        <article class="login-form-title">
             <h1>Instagram</h1>
-        </article>
-        {{ form.as_p }}
-        <article class="login-form-submit ">
-            <button type="submit ">Log In</button>
-        </article>
+        <form method="POST" action="">
+            {% csrf_token %}
+              <input type="text" name="username" placeholder="Username ..." class="form-control">
+              <input type="password" name="password" placeholder="Password ..." class="form-control">
+
+              <button type="submit ">Log In</button>
+        </form>
     </section>
     <article class="login-signup">
         <p>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
