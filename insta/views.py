@@ -40,7 +40,7 @@ def search_profile(request):
         return render(request, 'insta/results.html', params)
     else:
         message = "You haven't searched for any image category"
-    return render(request, 'instagram/results.html', {'message': message})
+    return render(request, 'insta/results.html', {'message': message})
 
 def register(request):
     form = RegisterForm()

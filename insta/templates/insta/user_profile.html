@@ -2,7 +2,7 @@
 {%load bootstrap4%}
 
 {% block content %}
-<h1>My Profile</h1>
+<h1 style="text-align:center">My Profile</h1>
 <br/> <br/>
 
 
@@ -49,7 +49,31 @@
   <div class="row">
     {% for image in user_posts %}
     <div class="col-md-3">
-      <img src="{{ image.image.url }}">
+      <img src="{{ image.image.url }}" style="width:300px;height:290px;margin-top:2%">
+      <p><span style="font-weight:bold">{{image.profile.user.username}} </span>{{image.image_caption}}</p>
+            <form action="{% url 'like_post' image.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <div class="containerEl" style="display:flex">
+                <button class="btn" type="submit" name="post_id" value="{{image.id}}">
+                    <i class="fa fa-heart-o fa-3x" aria-hidden="true" style="color:white"></i>
+                </button>
+                <a href="{% url 'add_comment' image.pk %}" style="color:white"><i class="fa fa-comment-o fa-3x" aria-hidden="true"></i></a>
+            </div>
+                <p>{{image.likes.all.count}} likes</p>
+                <!-- <p>{{total_likes}} likes</p> -->
+            </form>
+            <h2>Comments ...</h2>
+            {% if not image.comments.all %}
+              No comments yet ... <a href="{% url 'add_comment' image.pk %}">Add one</a>
+              {% else %}
+              <br/>
+                 {% for comment in image.comments.all %}
+                   <p><span style="font-weight:bold">{{comment.name}}</span>  {{comment.body}} {{comment.date_added|date:"SHORT_DATETIME_FORMAT"}}</p>
+                   
+                   
+                {% endfor %}
+            {% endif %}
     </div>
     {% endfor %}
         
