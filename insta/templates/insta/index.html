@@ -9,7 +9,7 @@
        <div class="row">
         {% for image in images %}
         <div class="col-md-4">
-            <h2>{{image.profile.user.username}}</h2>
+            <a href="{% url 'profile' image.profile.user.id %}"><h2>{{image.profile.user.username}}</h2> </a>
             <img  src="{{image.image.url}}" width="270px" height="250px" style="margin-top:9px;border-radius: 5%;">
             <p><span style="font-weight:bold">{{image.profile.user.username}} </span>{{image.image_caption}}</p>
             <form action="{% url 'like_post' image.pk %}" method="POST">

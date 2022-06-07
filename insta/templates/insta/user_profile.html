@@ -11,6 +11,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3">
+      {% if profile.user.id == userid %}
+                    <div class="profile-info-name-edit">
+                        <button><a href="{% url 'edit' profile.id %}">Edit Profile</a></button>
+                        <button><a href="{% url 'logout' %}">Logout</a></button>
+                    </div>
+                    {% endif %}
         <div class="card" style="width: 24rem;">
             <img src="{{user.profile.profile_photo.url}}" alt="" srcset="">
             <div class="card-body">
@@ -21,7 +27,7 @@
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-2">
-       <span class="mr-5"><strong>{{ images.count }}</strong> Posts</span>
+       <span class="mr-5"><strong>{{ user.profile.images_set.count }}</strong> Posts</span>
     </div>
     <div class="col-md-2">
       <span class="mr-5"> <strong>{{ user.profile.followers.count }}</strong> followers</span>

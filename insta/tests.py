@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 
 class TestProfile(TestCase):
     def setUp(self):
-        self.user = User(username='charles')
+        self.user = User(username='Jeff')
         self.user.save()
 
-        self.profile_test = Profile(id=1, name='image', profile_picture='default.jpg', bio='this is a test profile',
+        self.profile_test = Profile(id=1, name='mboto', profile_picture='default.jpg', bio='Moto sana',
                                     user=self.user)
 
     def test_instance(self):
@@ -23,7 +23,7 @@ class TestProfile(TestCase):
 
 class TestPost(TestCase):
     def setUp(self):
-        self.profile_test = Profile(name='charles', user=User(username='mikey'))
+        self.profile_test = Profile(name='Jeff', user=User(username='Ayieko'))
         self.profile_test.save()
 
         self.image_test = Images(image='default.png', image_name='test', image_caption='default test', user=self.profile_test)

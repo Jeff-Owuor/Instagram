@@ -10,20 +10,37 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout,login,authenticate
 
+@login_required(login_url='login')
 def unfollow(request, to_unfollow):
     if request.method == 'GET':
         user_profile2 = Profile.objects.get(pk=to_unfollow)
         unfollow_d = Follow.objects.filter(follower=request.user.profile, followed=user_profile2)
         unfollow_d.delete()
-        return redirect('profile', user_profile2.user.username)
+        return redirect('profile', user_profile2.user.id)
 
 
+@login_required(login_url='login')
 def follow(request, to_follow):
     if request.method == 'GET':
         user_profile3 = Profile.objects.get(pk=to_follow)
         follow_s = Follow(follower=request.user.profile, followed=user_profile3)
         follow_s.save()
-        return redirect('profile', user_profile3.user.username)
+        return redirect('profile', user_profile3.user.id)
+
+@login_required(login_url='login')
+def search_profile(request):
+    if 'search_user' in request.GET and request.GET['search_user']:
+        name = request.GET.get("search_user")
+        results = Profile.search_profile(name)
+        message = f'name'
+        params = {
+            'results': results,
+            'message': message
+        }
+        return render(request, 'insta/results.html', params)
+    else:
+        message = "You haven't searched for any image category"
+    return render(request, 'instagram/results.html', {'message': message})
 
 def register(request):
     form = RegisterForm()
@@ -50,22 +67,40 @@ def loginPage(request):
     
     return render(request,'registration/login.html',context)
 
+@login_required(login_url='login/')
 def profile(request, id):
     profile = Profile.objects.get(user=id)
     userid = request.user.id
-
-    return render(request, 'insta/profile.html',{"profile":profile, "userid":userid})
+    user_posts = profile.images_set.all()
+    followers = Follow.objects.filter(followed=profile)
+    follow_status = None
+    
+    for follower in followers:
+        if request.user.profile == follower.follower:
+            follow_status = True
+        else:
+            follow_status = False
+    context={
+        "profile":profile,
+        "userid":userid,
+        'user_posts': user_posts,
+        'followers': followers,
+        'follow_status': follow_status
+    }
+    return render(request, 'insta/user_profile.html',context)
 
 def logout_user(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login/')
 def LikeView(request,pk):
     post = get_object_or_404(Images, id=request.POST.get('post_id'))
     post.likes.add(request.user)
     
     return redirect('home')
 
+@login_required(login_url='login/')
 def edit(request, id):
     profile = Profile.objects.get(id=id)
     form = ProfilePicForm(instance=profile)
@@ -74,7 +109,7 @@ def edit(request, id):
         form = ProfilePicForm(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save(commit=False)
-            # instance.user = Profile.objects.get(user=request.user)
+            
             instance.save()
             return redirect(f'profile/{userid}/')
     return render(request, 'insta/edit.html', {"form":form})
@@ -92,30 +127,6 @@ class UserEditView(UpdateView):
     def get_object(self):
         return self.request.user
     
-@login_required(login_url='/accounts/login/')
-def user_profile(request, username):
-    user_prof = get_object_or_404(User, username=username)
-    if request.user == user_prof:
-        return redirect('profile', username=request.user.username)
-    user_posts = user_prof.profile.posts.all()
-    
-    followers = Follow.objects.filter(followed=user_prof.profile)
-    print(followers)
-    follow_status = None
-    for follower in followers:
-        if request.user.profile == follower.follower:
-            follow_status = True
-        else:
-            follow_status = False
-    context = {
-        'user_profile': user_prof,
-        'user_posts': user_posts,
-        'followers': followers,
-        'follow_status': follow_status
-    }
-    return render(request, 'user/user_profile.html', context)
-
-
 class AddCommentView(CreateView):
     model = Comments
     form_class = CommentForm
@@ -128,7 +139,7 @@ class AddCommentView(CreateView):
     
 
 # Create your views here.
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='login/')
 def imageUpload(request):
     current_user  = request.user
     if request.method =='POST':
@@ -163,14 +174,4 @@ def updateProfilePage(request):
         context  = {
             "form":form
             }
-   return render(request,'user/update_profile.html',context)
-
-# @login_required(login_url='/accounts/login/')
-# def myprofile(request, username = None):
-
-#     if not username:
-#         username = request.user.username
-#     # images by user id
-#     images = Images.objects.filter(user_id=username)
-
-#     return render(request, 'myprofile.html', locals())
+   return render(request,'insta/update_profile.html',context)
