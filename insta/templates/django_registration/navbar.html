@@ -12,19 +12,21 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'imageUpload' %}">post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'updateProfile' %}">Update profile</a>
+          </li>
         {%else%}
         <li class="nav-item">
           <a class="nav-link" href="/accounts/login">Login</a>
         </li>
         {% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'imageUpload' %}">post</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'updateProfile' %}">Update profile</a>
-          </li>
+     
+       
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_profile' %}">My profile</a>
+            
           </li>
       </ul>
     </div>

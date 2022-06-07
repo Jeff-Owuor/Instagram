@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
+from .forms import RegisterForm
 from .forms import UploadImageForm,ProfilePicForm,CommentForm
 from .models import Comments, Images,Profile,Follow
 from django.urls import reverse_lazy
@@ -8,7 +9,7 @@ from django.views.generic import DetailView
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-
+from django.contrib.auth import login
 
 def unfollow(request, to_unfollow):
     if request.method == 'GET':
@@ -24,6 +25,18 @@ def follow(request, to_follow):
         follow_s = Follow(follower=request.user.profile, followed=user_profile3)
         follow_s.save()
         return redirect('profile', user_profile3.user.username)
+
+def register(request):
+    form = RegisterForm()
+    userid = request.user.id
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    
+    return render(request, 'registration/register.html', {"form":form, "userid":userid})
 
 def logout_user(request):
     logout(request)
@@ -48,19 +61,28 @@ class UserEditView(UpdateView):
     def get_object(self):
         return self.request.user
     
-def profile(request, username):
-        user_profile = Images.get_Profile(username)
-        print(user_profile.username)
-        if request.user == user_profile:
-           return redirect('update_profile', username=request.user.username)
-      
+@login_required(login_url='/accounts/login/')
+def user_profile(request, username):
+    user_prof = get_object_or_404(User, username=username)
+    if request.user == user_prof:
+        return redirect('profile', username=request.user.username)
+    user_posts = user_prof.profile.posts.all()
     
-        context = {
-        'user_profile': user_profile,
-       
-         }
-
-        return render(request, 'user/user_profile.html', context)
+    followers = Follow.objects.filter(followed=user_prof.profile)
+    print(followers)
+    follow_status = None
+    for follower in followers:
+        if request.user.profile == follower.follower:
+            follow_status = True
+        else:
+            follow_status = False
+    context = {
+        'user_profile': user_prof,
+        'user_posts': user_posts,
+        'followers': followers,
+        'follow_status': follow_status
+    }
+    return render(request, 'user/user_profile.html', context)
 
 
 class AddCommentView(CreateView):
