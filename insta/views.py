@@ -38,6 +38,12 @@ def register(request):
     
     return render(request, 'registration/register.html', {"form":form, "userid":userid})
 
+def profile(request, id):
+    profile = Profile.objects.get(user=id)
+    userid = request.user.id
+
+    return render(request, 'insta/profile.html',{"profile":profile, "userid":userid})
+
 def logout_user(request):
     logout(request)
     return redirect('home')
