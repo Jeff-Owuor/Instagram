@@ -8,8 +8,7 @@ from django.views.generic.edit import CreateView,UpdateView
 from django.views.generic import DetailView
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from django.contrib.auth import logout
-from django.contrib.auth import login
+from django.contrib.auth import logout,login,authenticate
 
 def unfollow(request, to_unfollow):
     if request.method == 'GET':
@@ -28,15 +27,17 @@ def follow(request, to_follow):
 
 def register(request):
     form = RegisterForm()
-    userid = request.user.id
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
+            form.save()
+            return redirect('login')
     
-    return render(request, 'registration/register.html', {"form":form, "userid":userid})
+    return render(request, 'registration/register.html', {"form":form})
+
+def loginPage(request):
+    context ={}
+    return render(request,'registration/login.html',context)
 
 def profile(request, id):
     profile = Profile.objects.get(user=id)
@@ -53,6 +54,19 @@ def LikeView(request,pk):
     post.likes.add(request.user)
     
     return redirect('home')
+
+def edit(request, id):
+    profile = Profile.objects.get(id=id)
+    form = ProfilePicForm(instance=profile)
+    userid = request.user.id
+    if request.method == "POST":
+        form = ProfilePicForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            # instance.user = Profile.objects.get(user=request.user)
+            instance.save()
+            return redirect(f'profile/{userid}/')
+    return render(request, 'insta/edit.html', {"form":form})
 
 
 def index(request):

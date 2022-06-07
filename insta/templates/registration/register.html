@@ -10,7 +10,7 @@
         <article class="signup-form-description ">
             <h4>Sign up to see photos and videos from your friends.</h4>
         </article>
-        {{ form.as_p }}
+            {{ form.as_p }}
         <article class="signup-form-submit ">
             <button type="submit ">Sign up</button>
         </article>
@@ -18,6 +18,7 @@
             <p>By signing up, you agree to our <strong>Terms</strong>,<strong>Data</strong>,<strong>Policy</strong> and <strong>Cookies Policy.</strong></p>
         </article>
     </section>
+    {{ form.errors }}
     <article class="signup-login ">
         <p>Have an account? <a href="{% url 'login' %} ">Log in</a></p>
     </article>
